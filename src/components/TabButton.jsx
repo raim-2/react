@@ -6,7 +6,7 @@
  */
 
 // 1. children 사용
-export default function TabButton({children, onSelect}) {
+export default function TabButton({children, onSelect, isSelected}) {
     // 이벤트연결하기
     // 1. 일반 명령식 자바스크립트
     // document.querySelector('button').addEventListener('click', () => {})
@@ -17,8 +17,8 @@ export default function TabButton({children, onSelect}) {
     return (
         <li>
             {/* <button>{props.children}</button> */}
-
-            <button onClick={onSelect}>{children}</button>
+            {/* jsx에서는 class대신 className을 사용한다. id는 그대로 id */}
+            <button className={isSelected ? 'active' : undefined} onClick={onSelect}>{children}</button>
         </li>
     )
 }
