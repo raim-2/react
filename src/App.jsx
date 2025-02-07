@@ -9,13 +9,11 @@
  *
  * 컴포넌트가 증가할 수록 하나의 파일에 여러개의 컴포넌트를 넣는것은 좋지 x
  */
-// import componentImg from "./assets/components.png";
-import { useState } from "react"; // 리액트에서 use로 시작하는 함수는 리액트 Hooks라 함
 
-import CorecConcept from "./components/CoreConcept.jsx";
+import { Fragment } from "react"; // 리액트에서 use로 시작하는 함수는 리액트 Hooks라 함
+import CoreConcepts from "./components/CoreConcepts.jsx";
+import Examples from "./components/Examples.jsx";
 import Header from "./components/Header/Header.jsx";
-import TabButton from "./components/TabButton.jsx";
-import { CORE_CONCEPTS, EXAMPLES } from "./data.js";
 
 /* <Header></Header> 또는 <Header /> */
 /**
@@ -30,142 +28,25 @@ import { CORE_CONCEPTS, EXAMPLES } from "./data.js";
  */
 
 function App() {
-    // const stateArray =useState('Please click a button');
-    // let tabContent = 'Please click a button';
-
-    // 이름은 자유롭게 지을 수 있나 아래 이름이 일반적, 첫번째 요소는 초기값
-    // 두번째 요소는 항상 함수이며, 상태를 업데이트 하기 위해 실행되고, 저장 값을 업데이트한다.
-
-    const [selectedTopic, setSelecTopic] = useState();
-
-    function handleClick(selectedButton) {
-        // selectedButton => 'components', 'jsx', 'props', 'state'
-        console.log(selectedButton + " selected!");
-        setSelecTopic(selectedButton);
-        //console.log(selectedTopic);
-        //app 컴포넌트를 다 실행 후 -> 업데이트 된 값 사용 가능
-        //따라서 업데이트 스케줄이 조정되자마자 바로 로그찍어보면 업데이트된 값이 안보이는 것
-    }
-
     console.log("app component executing");
 
-    // jsx 코드는 반환되지 않아, 컴포넌트의 코드 아무곳에 일반 값으로 사용 가능, 변수 또는 상수에 저장 가능하다.
-    // 3. 변수나 상수에 저장
-    // let tabContent = <p>Please select a topic.</p>;
-
-    // if (selectedTopic) {
-    //     tabContent = (
-    //         <div id="tab-content">
-    //             <h3>{EXAMPLES[selectedTopic].title}</h3>
-    //             <p>{EXAMPLES[selectedTopic].description}</p>
-    //             <pre>
-    //                 <code>{EXAMPLES[selectedTopic].code}</code>
-    //             </pre>
-    //         </div>
-    //     );
-    // }
-
     return (
-        <div>
+        /**
+         * jsx표현식은 꼭 하나의 부모요소/상위 요소로 묶여있어야 됨
+         * -> 이유는 두 개의 값을 반환하는게 불가능하기 때문 (하나의 값만 반환하기 위함)
+         * <div></div>를 사용해 묶을 순 있지만 이렇게 되면 필요없는 div만 하나 더 추가하게 되는 것
+         * -> 이를 대체하는 <Fragment>이다. 이는 리액트 안에 정의되어 있는 컴포넌트로,
+         * 빌드 시에 <div>와 달리 아무것도 없다는 것을 알 수 있다.
+         * <Fragment></Fragment> 대신에 <></> 이렇게 쓰기도 함. 
+         */
+        <Fragment>
             {/* <Header></Header> */}
             <Header />
             <main>
-                <section id="core-concepts">
-                    <h2>Core Concepts</h2>
-                    <ul>
-                        {CORE_CONCEPTS.map((conceptItem) => <CorecConcept key={conceptItem.title} {...conceptItem} /> )}
-                        {/* 재사용하면서 할 때마다 다른 데이터 전달하고자 할 때 사용 */}
-                        {/* 커스텀 컴포넌트에는 props라는 커스텀 속성 (컴포넌트를 설정하는 개념이라고 해서 props라 불림)도 지정 가능하다.
-                        리액트가 props를 키로, 해당 속성의 값을 값으로 해 하나의 객체로 그룹화한다. */}
-
-                        {/* <CorecConcept id={CORE_CONCEPTS[0]} />
-                        <CorecConcept id={CORE_CONCEPTS[1]} />
-                        <CorecConcept id={CORE_CONCEPTS[2]} />
-                        <CorecConcept id={CORE_CONCEPTS[3]} /> */}
-
-                        {/* 스프레드연산자 사용해 객체의 모든 키, 값을 뽑을 수 있다. */}
-                        {/* 이렇게 하면 데이터 변경시 문제 생김 - 개수 변경시 */}
-                        {/* <CorecConcept
-                            title={CORE_CONCEPTS[0].title}
-                            description={CORE_CONCEPTS[0].description}
-                            image={CORE_CONCEPTS[0].image}
-                        />
-                        <CorecConcept {...CORE_CONCEPTS[1]} />
-                        <CorecConcept {...CORE_CONCEPTS[2]} />
-                        <CorecConcept {...CORE_CONCEPTS[3]} /> */}
-                    </ul>
-                </section>
-                <section id="examples">
-                    <h2>Examples</h2>
-                    <menu>
-                        {/* 컴포넌트 합성 */}
-                        {/* <TabButton label="Components"></TabButton> */}
-                        {/* <TabButton onSelect={handleClick}>Components</TabButton> */}
-                        {/* 이벤트를 핸들링하는 함수의 실행을 다른 함수로 감싸면,
-                        그 다른 함수가 이벤트 핸들링의 prop(속성)의 값으로 전달된다. */}
-                        <TabButton  isSelected = {selectedTopic === 'components'} onSelect={() => handleClick("components")}>
-                            Components
-                        </TabButton>
-                        <TabButton isSelected = {selectedTopic === 'jsx'} onSelect={() => handleClick("jsx")}>
-                            JSX
-                        </TabButton>
-                        <TabButton isSelected = {selectedTopic === 'props'} onSelect={() => handleClick("props")}>
-                            Props
-                        </TabButton>
-                        <TabButton isSelected = {selectedTopic === 'state'} onSelect={() => handleClick("state")}>
-                            State
-                        </TabButton>
-                    </menu>
-                    {/* {selectedTopic} */}
-                    {/* 조건 설정하는 법 */}
-
-                    {/* 1. 삼항연산자 부정 / 긍정조건으로 나눠서 처리 */}
-                    {/* {!selectedTopic ? (
-                        <p>Please select a topic.</p>
-                    ) : null}
-                    {selectedTopic ? (
-                        <div id="tab-content">
-                            <h3>{EXAMPLES[selectedTopic].title}</h3>
-                            <p>{EXAMPLES[selectedTopic].description}</p>
-                            <pre>
-                                <code>{EXAMPLES[selectedTopic].code}</code>
-                            </pre>
-                        </div>
-                    ) : null} */}
-
-                    {/* 2. 삼항연산자 두조건 합쳐서 처리 */}
-                    {/* {!selectedTopic ? (
-                        <p>Please select a topic.</p>
-                    ) : (
-                        <div id="tab-content">
-                            <h3>{EXAMPLES[selectedTopic].title}</h3>
-                            <p>{EXAMPLES[selectedTopic].description}</p>
-                            <pre>
-                                <code>{EXAMPLES[selectedTopic].code}</code>
-                            </pre>
-                        </div>
-                    )} */}
-
-                    {/* 3. 변수나 상수에 저장 */}
-                    {/* {tabContent} */}
-
-                    {/* && 연산자를 사용해서 처리
-                    아래와 같은 방법도 더 이해하기 쉬운 코드로사용됨
-                    삼항연산자 사용대신 and 연산자를 사용할 수 있는데,
-                    조건이 사실인 경우, and 연산자 뒤에 내용을 출력하기 때문 */}
-                    {!selectedTopic && <p>Please select a topic.</p>}
-                    {selectedTopic && (
-                        <div id="tab-content">
-                            <h3>{EXAMPLES[selectedTopic].title}</h3>
-                            <p>{EXAMPLES[selectedTopic].description}</p>
-                            <pre>
-                                <code>{EXAMPLES[selectedTopic].code}</code>
-                            </pre>
-                        </div>
-                    )}
-                </section>
+                <CoreConcepts></CoreConcepts>
+                <Examples></Examples>
             </main>
-        </div>
+        </Fragment>
     );
 }
 
